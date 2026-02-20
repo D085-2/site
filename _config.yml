@@ -1,0 +1,9 @@
+title: Spring 2026
+description: Website for the Detachment 085 AFROTC
+theme: just-the-docs
+
+url: https://Berkeley085.github.io
+baseurl: /site
+
+  # aux_links:
+  #   Template Repository: https://github.com/just-the-docs/just-the-docs-template #for later

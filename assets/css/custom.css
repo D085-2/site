@@ -1,0 +1,22 @@
+@media (min-width: 50rem) {
+  .side-bar {
+    width: 270px !important;
+    min-width: 270px !important;
+  }
+  
+  .main {
+    margin-left: 270px !important;
+  }
+}
+
+@media (min-width: 66.5rem) {
+  .side-bar {
+    width: 270px !important;
+    min-width: 270px !important;
+  }
+  
+  .main {
+    margin-left: 270px !important;
+  }
+}
+
