@@ -6,19 +6,14 @@ nav_order: 13
 
 # POC Cadets
 
-<div style="display: flex; gap: 30px; flex-wrap: wrap; margin: 20px 0;">
-
-  <div style="display: inline-block; background: white; padding: 12px 12px 40px 12px; box-shadow: 3px 3px 10px rgba(0,0,0,0.3); transform: rotate(-2deg);">
-    <img src="{{ '/assets/images/Pro.jpg' | relative_url }}" width="200" style="display: block;">
-    <p style="text-align: center; font-family: 'Courier New', monospace; margin-top: 10px; color: #333;">C/Supreme Leader of Det 085 Chen</p>
-  </div>
-
-  <div style="display: inline-block; background: white; padding: 12px 12px 40px 12px; box-shadow: 3px 3px 10px rgba(0,0,0,0.3); transform: rotate(2deg);">
-    <img src="{{ '/assets/images/okada.png' | relative_url }}" width="200" style="display: block;">
-    <p style="text-align: center; font-family: 'Courier New', monospace; margin-top: 10px; color: #333;">C/Chairman of the Det085 Central Insider Committee Okada</p>
-  </div>
-
+<div style="position: relative; width: 100%; height: 0; padding-top: 50.0000%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAG33OHKFts/TzEJiLVmiX0oFLLiYLuobw/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
 </div>
+<a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAG33OHKFts&#x2F;TzEJiLVmiX0oFLLiYLuobw&#x2F;view?utm_content=DAG33OHKFts&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Spring'26 Org Chart</a> by Kurt DelaCruz
 
 <!-- 
 ## POC Resources
