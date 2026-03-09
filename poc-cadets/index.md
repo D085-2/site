@@ -24,25 +24,97 @@ nav_order: 3
 ---
 
 # Chain of Command
+---
+title: Chain of Command
+layout: default
+nav_order: 3
+---
 
-| Position | Name |
-|----------|------|
-| President of the United States (POTUS) | The Honorable Donald J. Trump |
-| Secretary of Defense (SECDEF) | The Honorable Pete B. Hegseth |
-| Secretary of the Air Force (SECAF) | Dr. Troy E. Meink |
-| Chairman of the Joint Chiefs of Staff (CJCS) | General John D. Caine |
-| Chief of Staff of the Air Force (CSAF) | General Kenneth S. Wilsbach |
-| Chief Master Sergeant of the Air Force (CMSAF) | CMSgt David R. Wolfe |
-| Chief of Space Operations (CSO) | General B. Chance Saltzman |
-| Chief Master Sergeant of the Space Force (CMSSF) | CMSgt John F. Bentivegna |
-| AETC Commander (AETC/CC) | Lt General Clark J. Quinn |
-| Air Force Accessions Center (AFAC/CC) | Brig General Jeffrey W. Nelson |
-| Holm Center Commander (Holm Ctr/CC) | Brig General Joseph L. Sheffield |
-| AFROTC Commander (AFROTC/CC) | Colonel Eugene A. Moore III |
-| AFROTC Southwest Region (SWR/CC) | Colonel Gregory K. Cyrus |
-| Det 085 Commander | Lt Colonel Donald J. Fyffe |
-| Det 085 Director of Operations | Lt Colonel Maxine Lucas |
-| Det 085 Cadet Wing Commander | C/Col Kurt DelaCruz |
+# Chain of Command
+
+<table style="width:100%; border-collapse: collapse; font-size: 14px;">
+  <tbody>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>President of the United States (POTUS)</strong><br>The Honorable Donald J. Trump
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Secretary of Defense (SECDEF)</strong><br>The Honorable Pete B. Hegseth
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Secretary of the Air Force (SECAF)</strong><br>Dr. Troy E. Meink
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Chairman of the Joint Chiefs of Staff (CJCS)</strong><br>General John D. Caine
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Chief of Staff of the Air Force (CSAF)</strong><br>General Kenneth S. Wilsbach
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Chief Master Sergeant of the Air Force (CMSAF)</strong><br>CMSgt David R. Wolfe
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Chief of Space Operations (CSO)</strong><br>General B. Chance Saltzman
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Chief Master Sergeant of the Space Force (CMSSF)</strong><br>CMSgt John F. Bentivegna
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>AETC Commander (AETC/CC)</strong><br>Lt General Clark J. Quinn
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Air Force Accessions Center (AFAC/CC)</strong><br>Brig General Jeffrey W. Nelson
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>Holm Center Commander (Holm Ctr/CC)</strong><br>Brig General Joseph L. Sheffield
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>AFROTC Commander (AFROTC/CC)</strong><br>Colonel Eugene A. Moore III
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0;">
+        <strong>AFROTC Southwest Region (SWR/CC)</strong><br>Colonel Gregory K. Cyrus
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0; width: 50%;">
+        <strong>Det 085 Commander</strong><br>Lt Colonel Donald J. Fyffe
+      </td>
+      <td style="padding: 10px 14px; border-bottom: 1px solid #e0e0e0; width: 50%;">
+        <strong>Det 085 Director of Operations</strong><br>Lt Colonel Maxine Lucas
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 10px 14px;">
+        <strong>Det 085 Cadet Wing Commander</strong><br>C/Col Kurt DelaCruz
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <!-- 
 ## POC Resources
 -->
