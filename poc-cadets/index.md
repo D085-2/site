@@ -23,7 +23,4 @@ nav_order: 13
     src="https://www.canva.com/design/DAHDfL7e_PM/ouzHEwMRD8wiU3YWgv9rOw/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
   </iframe>
 </div>
-<a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAHDfL7e_PM&#x2F;ouzHEwMRD8wiU3YWgv9rOw&#x2F;view?utm_content=DAHDfL7e_PM&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Copy of Spring'26 Org Chart</a> by Eric Chen
-<!-- 
-## POC Resources
--->
+<a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAHDfL7e_PM&#x2F;ouzHEwMRD8wiU3YWgv9rOw&#x2F;view?utm_content=DAHDfL7e_PM&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">
