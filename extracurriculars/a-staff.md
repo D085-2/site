@@ -1,11 +1,11 @@
 ---
-title: A-Staff GMC Deputy Interest
+title: A-Staff
 layout: default
 parent: Extracurriculars
 nav_order: 4
 ---
 
-# A-Staff GMC Deputy Interest
+# A-Staff
 
 ## **Spring 2026** Interest Form
 
