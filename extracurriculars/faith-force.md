@@ -1,5 +1,5 @@
 ---
-title: Wargaming
+title: Faith Force
 layout: default
 parent: Extracurriculars
 nav_order: 6
