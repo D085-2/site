@@ -25,6 +25,6 @@ In addition to our weekly meetings, we organize in-person events and fellowship 
 
 You can join Faith Force through our [Discord server](https://discord.gg/Bz8QQhrmvm). Once you join, you’ll have access to meeting information, event updates, and community discussions.
 
-### Faith Force **Discord Server**
+## Faith Force **Discord Server**
 
 [Discord Server Invite](https://discord.gg/Bz8QQhrmvm){: .btn .btn-outline .fs-3 }

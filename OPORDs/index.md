@@ -13,11 +13,5 @@ nav_order: 4
 - **Upload Schedule**: Will upload biweekly, around Wed/Thu.
 - **Review Deadline**: Before Friday 
 
----
-
 <!-- [View Current SPT Operations Orders](#)
 -->
-#####  Quick Links
-
-- [Home](/)
-- [Calendar](/calendar/)
