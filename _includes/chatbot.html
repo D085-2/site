@@ -1,0 +1,270 @@
+<!-- Det 085 AI Chatbot Widget -->
+<style>
+  #d085-chat-bubble {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  #d085-chat-toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #1a3a6b;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: background 0.2s, transform 0.2s;
+    margin-left: auto;
+  }
+
+  #d085-chat-toggle:hover {
+    background: #0f2548;
+    transform: scale(1.05);
+  }
+
+  #d085-chat-toggle svg {
+    width: 26px;
+    height: 26px;
+    fill: white;
+  }
+
+  #d085-chat-window {
+    display: none;
+    flex-direction: column;
+    width: 340px;
+    height: 480px;
+    background: #ffffff;
+    border: 1px solid #dde1e7;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  #d085-chat-window.open {
+    display: flex;
+  }
+
+  #d085-chat-header {
+    background: #1a3a6b;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #d085-chat-header .avatar {
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+  }
+
+  #d085-chat-header .info .name {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  #d085-chat-header .info .subtitle {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin: 0;
+  }
+
+  #d085-chat-header .close-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255,255,255,0.8);
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  #d085-chat-header .close-btn:hover {
+    color: white;
+  }
+
+  #d085-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f8f9fb;
+  }
+
+  .d085-msg {
+    max-width: 82%;
+    padding: 9px 13px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+
+  .d085-msg.bot {
+    background: #ffffff;
+    border: 1px solid #dde1e7;
+    color: #1a1a2e;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+
+  .d085-msg.user {
+    background: #1a3a6b;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .d085-msg.typing {
+    color: #888;
+    font-style: italic;
+  }
+
+  .d085-msg ul {
+    margin: 4px 0;
+    padding-left: 18px;
+  }
+
+  .d085-msg li {
+    margin: 2px 0;
+  }
+
+  .d085-msg a {
+    color: #1a3a6b;
+    word-break: break-all;
+  }
+
+  .d085-msg.user a {
+    color: #cce0ff;
+  }
+
+  #d085-chat-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #ffffff;
+    border-top: 1px solid #dde1e7;
+  }
+
+  #d085-chat-input {
+    flex: 1;
+    border: 1px solid #dde1e7;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 13.5px;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    color: #1a1a2e;
+    background: #f8f9fb;
+    transition: border-color 0.2s;
+  }
+
+  #d085-chat-input:focus {
+    border-color: #1a3a6b;
+    background: #fff;
+  }
+
+  #d085-chat-send {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #1a3a6b;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  #d085-chat-send:hover {
+    background: #0f2548;
+  }
+
+  #d085-chat-send:disabled {
+    background: #b0bec5;
+    cursor: default;
+  }
+
+  #d085-chat-send svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+    margin-left: 2px;
+  }
+
+  @media (max-width: 400px) {
+    #d085-chat-window {
+      width: calc(100vw - 32px);
+      right: 0;
+    }
+  }
+</style>
+
+<div id="d085-chat-bubble">
+  <!-- Chat window -->
+  <div id="d085-chat-window">
+    <div id="d085-chat-header">
+      <div class="avatar">D</div>
+      <div class="info">
+        <p class="name">Det 085 Assistant</p>
+        <p class="subtitle">AFROTC · UC Berkeley</p>
+      </div>
+      <button class="close-btn" id="d085-close-btn" aria-label="Close chat">&times;</button>
+    </div>
+
+    <div id="d085-chat-messages">
+      <div class="d085-msg bot">
+        Hi! I'm the Det 085 AI assistant. Ask me about AFROTC, our detachment, or how to get involved.
+      </div>
+    </div>
+
+    <div id="d085-chat-input-row">
+      <input
+        type="text"
+        id="d085-chat-input"
+        placeholder="Ask a question..."
+        maxlength="500"
+        autocomplete="off"
+      />
+      <button id="d085-chat-send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Toggle button -->
+  <button id="d085-chat-toggle" aria-label="Open chat assistant">
+    <!-- Chat icon -->
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+    </svg>
+  </button>
+</div>
+
+<script src="{{ '/assets/js/chatbot.js' | relative_url }}"></script>

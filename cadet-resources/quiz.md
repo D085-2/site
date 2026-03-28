@@ -19,12 +19,4 @@ nav_order: 1
 
 
 
----
-##### Quick Links
-- [Home](/)
-- [Cadet Resources](index.html)
-
-
-
-
 

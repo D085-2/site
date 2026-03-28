@@ -22,10 +22,8 @@ Department of Air Force & AFROTC Publications:
 - [AFI 36-2618: The Enlisted Force Structure](https://www.afrc.af.mil/Portals/87/documents/PDC/afh36-2618.pdf?ver=2020-03-10-102348-690)
 
 ### AFROTC:
-- [AFROTCI 36-2011: General Military Course](#)
-- [AFROTCI 36-2017: Professional Officer Course](#)
+- [AFROTCI 36-2011: General Military Course](https://www.usm.edu/aerospace-studies/afrotci36-2011_vol3_cadet_operations_2025-01-13.pdf)
+Ctrl + F --> GMC
+- [AFROTCI 36-2017: Professional Officer Course](https://docslib.org/doc/6771135/by-order-of-the-commander-afrotc-instruction-36-2017)
+Ctrl + F --> POC 
 
----
-##### Quick Links
-- [Home](/)
-- [Cadet Resources](index.html)
