@@ -54,17 +54,19 @@ input.addEventListener("keydown", (e) => {
 send.addEventListener("click", sendMessage);
 
 function renderMarkdown(text) {
-  return text
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-    // Links
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-    // Bare URLs
-    .replace(/(?<!["\(])(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
+  // Truncate pathologically long input to prevent ReDoS
+  const safe = text.length > 20000 ? text.slice(0, 20000) : text;
+  return safe
+    // Bold — use negated char class instead of lazy .*?
+    .replace(/\*\*([^*]{1,500})\*\*/g, "<strong>$1</strong>")
+    // Links — cap label and URL length
+    .replace(/\[([^\]]{1,200})\]\((https?:\/\/[^)\s]{1,1000})\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    // Bare URLs — [^\s<] is already non-backtracking, cap length
+    .replace(/(?<!["\(])(https?:\/\/[^\s<]{1,1000})/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
     // Bullet points
-    .replace(/^\s*[\*\-]\s+(.+)/gm, "<li>$1</li>")
+    .replace(/^\s*[*-]\s+(.{1,1000})/gm, "<li>$1</li>")
     // Wrap consecutive <li> in <ul>
-    .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
+    .replace(/(<li>[\s\S]{1,10000}<\/li>)/g, "<ul>$1</ul>")
     // Line breaks
     .replace(/\n/g, "<br>");
 }
