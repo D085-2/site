@@ -34,20 +34,12 @@ In addition to our weekly meetings, we organize in-person events and fellowship 
 
 You can join Faith Force through our [Discord server](https://discord.gg/Bz8QQhrmvm). Once you join, you’ll have access to meeting information, event updates, and community discussions.
 
-## Faith Force **Discord Server**
-
 [Discord Server Invite](https://discord.gg/Bz8QQhrmvm){: .btn .btn-outline .fs-3 }
 
 **Codirectors:**
-Nathaniel Whitmire
-nfwsfw@gmail.com
-
-Andres Martinez-Hall
-amartinezhall@gmail.com
+- Nathaniel Whitmire — nfwsfw@gmail.com
+- Andres Martinez-Hall — amartinezhall@gmail.com
 
 **Founded:** September 16, 2025
 
-**Founder:**
-Caleb Givan
-calebrgivan@gmail.com
-(707) 570-7404
+**Founder:** Caleb Givan — calebrgivan@gmail.com — (707) 570-7404
