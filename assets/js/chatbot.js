@@ -61,7 +61,7 @@ function renderMarkdown(text) {
     .replace(/\[([^\]]{1,200})\]\((https?:\/\/[^)\s]{1,1000})\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
     .replace(/(?<!["\(])(https?:\/\/[^\s<]{1,1000})/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
     .replace(/^\s*[*-]\s+(.{1,1000})/gm, "<li>$1</li>")
-    .replace(/(<li>[\s\S]{1,10000}<\/li>)/g, "<ul>$1</ul>")
+    .replace(/((?:<li>.*?<\/li>\s*)+)/gs, "<ul>$1</ul>")
     .replace(/\n/g, "<br>");
 }
 
