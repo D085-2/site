@@ -21,6 +21,8 @@ nav_order: 1
 
 ## Announcements
 
+
+
 * **LLab OPORDs**
   * Will upload biweekly, around Wed/Thu. Please review it before LLab. | [View LLAB OPORDs ](https://drive.google.com/drive/folders/14fdc2qNvM17RsbF73LUUXgR2c1usnXOC?usp=sharing)
 
@@ -28,8 +30,10 @@ nav_order: 1
 * **PT OPORDs**
   * Will upload biweekly, Please review it before each PT. | [View SPT OPORDs ](https://drive.google.com/drive/folders/1eE71CVFnl-2pe-Q04vJnNEHvwHuZRk-r?usp=sharing)
 
-* **Det 085 Shirt Pre-Order**
-  * Interested in purchasing a Det shirt? Stock is limited. | [Pre Order Form](https://www.jotform.com/form/260318113551144)
+* **Website Changelog**
+ * You can now utilize the chatbot to ask about the contents of the OPORDS! Try "What are the contents of this week's LLAB?"
+ * CRON scheduled events added for faster information fetching; Cloudflare worker's runtime optimized
+
 
 ## Calendar
 
@@ -75,4 +79,4 @@ nav_order: 1
 
 ---
 
-*Last updated: March*
+*Last updated: 12 April, 2026*
