@@ -31,8 +31,8 @@ nav_order: 1
   * Will upload biweekly, Please review it before each PT. | [View SPT OPORDs ](https://drive.google.com/drive/folders/1eE71CVFnl-2pe-Q04vJnNEHvwHuZRk-r?usp=sharing)
 
 * **Website Changelog**
- * You can now utilize the chatbot to ask about the contents of the OPORDS! Try "What are the contents of this week's LLAB?"
- * CRON scheduled events added for faster information fetching; Cloudflare worker's runtime optimized
+  * | You can now utilize the chatbot to ask about the contents of the OPORDs! Try "What are the contents of this week's LLAB?" |
+  * | CRON scheduled events added for faster information fetching; Cloudflare worker's runtime optimized |
 
 
 ## Calendar
