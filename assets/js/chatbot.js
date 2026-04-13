@@ -108,28 +108,77 @@ async function sendMessage() {
       body: JSON.stringify({ messages: payload }),
     });
 
-    const data = await res.json();
-
     if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
       typing.remove();
       appendMessage("bot", data.error ?? "Sorry, something went wrong. Please try again.");
       history.pop();
       return;
     }
 
-    const reply = data.reply ?? "Sorry, I didn't get a response.";
-    typing.remove();
-    appendMessage("bot", reply);
-    history.push({ role: "assistant", content: reply });
+    // Stream the response
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let fullReply = "";
+    let streamDiv = null;
 
-    if (data.remaining !== undefined) {
-      if (localRemaining === null) {
-        localRemaining = data.remaining;
-      } else {
-        localRemaining = Math.min(localRemaining - 1, data.remaining);
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        const json = line.slice(6).trim();
+        if (!json) continue;
+
+        try {
+          const parsed = JSON.parse(json);
+
+          if (parsed.error) {
+            typing.remove();
+            appendMessage("bot", "Sorry, something went wrong. Please try again.");
+            history.pop();
+            return;
+          }
+
+          if (parsed.chunk) {
+            // First chunk — swap typing indicator for real message
+            if (!streamDiv) {
+              typing.remove();
+              streamDiv = appendMessage("bot", "");
+            }
+            fullReply += parsed.chunk;
+            streamDiv.innerHTML = renderMarkdown(fullReply);
+            messages.scrollTop = messages.scrollHeight;
+          }
+
+          if (parsed.done) {
+            history.push({ role: "assistant", content: fullReply });
+            if (parsed.remaining !== undefined) {
+              if (localRemaining === null) {
+                localRemaining = parsed.remaining;
+              } else {
+                localRemaining = Math.min(localRemaining - 1, parsed.remaining);
+              }
+              updateCounter(localRemaining);
+            }
+          }
+        } catch {}
       }
-      updateCounter(localRemaining);
     }
+
+    // Fallback if no chunks came through
+    if (!streamDiv) {
+      typing.remove();
+      appendMessage("bot", "Sorry, I didn't get a response.");
+      history.pop();
+    }
+
   } catch (err) {
     typing.remove();
     appendMessage("bot", "Sorry, something went wrong. Please try again.");
