@@ -31,8 +31,7 @@ nav_order: 1
   * Will upload biweekly, Please review it before each PT. | [View SPT OPORDs ](https://drive.google.com/drive/folders/1eE71CVFnl-2pe-Q04vJnNEHvwHuZRk-r?usp=sharing)
 
 * **Website Changelog**
-  * | [FEATURE] The chatbot can now answer questions about this week's LLAB and PT OPORDs! Try asking "What are the contents of this week's LLAB?"|
-  * | [OPTIMIZATION] Cron scheduled events added to pre-warm website content for faster responses; Cloudflare Worker runtime optimized; Streaming enabled for a faster chatbot experience; Shortened responses to limit unintended errors/strain |
+  * | [NEW] Added SpecOps PT |
 
 
 ## Calendar
