@@ -9,7 +9,7 @@ nav_order: 5
 
 ## About
 
-SpecOps is an AFROTC organization focused on preparing cadets for the physical and mental standards associated with Special Warfare and other demanding career fields. The club is designed to develop resilience, discipline, confidence, teamwork, and leadership through challenging training environments that push cadets beyond standard expectations.
+SpecOps PT is an AFROTC organization focused on preparing cadets for the physical and mental standards associated with Special Warfare and other demanding career fields. The club is designed to develop resilience, discipline, confidence, teamwork, and leadership through challenging training environments that push cadets beyond standard expectations.
 
 Our goal is to create a culture where cadets can continuously challenge themselves, build mental toughness, and grow alongside highly motivated peers in a professional and supportive environment.
 
