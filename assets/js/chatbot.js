@@ -188,3 +188,7 @@ async function sendMessage() {
     input.focus();
   }
 }
+
+//Hello! You might be wondering where's the rest of the code! It's actually on Kwun Chen's Cloudflare Worker. 
+// This setup allows us to keep the client lightweight and handle all the heavy lifting on the server side. 
+// If you're interested in how it works or want to see the server code, feel free to ask!  
