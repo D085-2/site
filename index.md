@@ -31,7 +31,7 @@ nav_order: 1
   * Will upload biweekly, Please review it before each PT. | [View SPT OPORDs ](https://drive.google.com/drive/folders/1eE71CVFnl-2pe-Q04vJnNEHvwHuZRk-r?usp=sharing)
 
 * **Website Changelog**
-  * | [NEW] Added Honor Guard, Spec Ops PT, Arnies! |
+  * | [OPTIMIZE] Heavily optimized chatbot, added a 5-minute CRON timer for "hot" chatbot warmup. |
 
 
 ## Calendar
@@ -78,5 +78,5 @@ nav_order: 1
 
 ---
 
-*Last updated: 28th, May 2026*
+*Last updated: 20th, June 2026*
 *Website Accountability: C/Chen*
