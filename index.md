@@ -32,6 +32,7 @@ nav_order: 1
 
 * **Website Changelog**
   * | [OPTIMIZE] Heavily optimized chatbot, added a 5-minute CRON timer for "hot" chatbot warmup. |
+  * | [NEW] Added uniform fitting appointments. |
 
 
 ## Calendar
