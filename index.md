@@ -84,5 +84,5 @@ nav_order: 1
 
 ---
 
-*Last updated: 12th, July 2026*
+*Last updated: 28th, August 2026*
 *Website Accountability: C/Chen*
