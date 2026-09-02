@@ -38,8 +38,8 @@ You can join Faith Force through our [Discord server](https://discord.gg/Bz8QQhr
 
 **Codirectors:**
 - Nathaniel Whitmire — nfwsfw@gmail.com
-- Andres Martinez-Hall — amartinezhall@gmail.com
+- Kevin Yi — 0000817108berkeley@berkeley.edu
 
 **Founded:** September 16, 2025
 
-**Founder:** Caleb Givan — calebrgivan@gmail.com — (707) 570-7404
+**Founder:** Caleb Givan — calebrgivan@gmail.com — (707) 570-7404 
