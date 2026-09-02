@@ -31,11 +31,7 @@ nav_order: 1
   * Will upload biweekly, Please review it before each PT. | [View SPT OPORDs ](https://drive.google.com/drive/folders/1eE71CVFnl-2pe-Q04vJnNEHvwHuZRk-r?usp=sharing)
 
 * **Website Changelog -> Summer Updates**
-  * | [OPTIMIZE] Heavily optimized chatbot, added a 5-minute CRON timer for "hot" chatbot warmup. |
-
-  * | [FIX] Chatbot now retrieves PT and LLAB schedules upon update, no need to wait for website maintainer to manually delete KV keys. Just prompt "What are we doing for LLAB this week?" as soon as the Slack announcement goes out!
-
-  * | [NEW] Added all extracirriculars. |
+  * | [FIX] Chatbot now retrieves Google Drive from SPT and LLAB folders correctly. Just prompt "What are we doing for LLAB this week?" as soon as the Slack announcement goes out! Fixed other bugs.
   
   * | [NEW] Added uniform fitting appointments. |
 
