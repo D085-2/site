@@ -8,7 +8,7 @@ nav_order: 1
     <h1 style="margin: 1em 0; font-size: 1.5em !important;">Detachment 085</h1>
     <p><span style="white-space: nowrap;"><strong>LLAB</strong>: Fri: 1200 – 1400</span></p>
     <p><span style="white-space: nowrap;"><strong>SPT</strong>: Wed & Fri: 0700 – 0800</span></p>
-    <p><span style="white-space: nowrap;"><strong>PFA</strong>: First Week of Each Month – Friday: 0700, please arrive at Det at 0630 </span></p>
+    <p><span style="white-space: nowrap;"><strong>PFA</strong>: First Week of Each Month – Friday: 0600, please arrive at Det at 0530 </span></p>
   </div>
 
 
