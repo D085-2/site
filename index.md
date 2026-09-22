@@ -24,7 +24,7 @@ nav_order: 1
 
 
 * **LLab OPORDs**
-  * Will upload biweekly, around Wed/Thu. Please review it before LLab. | [View LLAB OPORDs ](https://drive.google.com/drive/folders/14fdc2qNvM17RsbF73LUUXgR2c1usnXOC?usp=sharing)
+  * Will upload biweekly, around Wed/Thu. Please review it before LLAB. | [View LLAB OPORDs ](https://drive.google.com/drive/folders/14fdc2qNvM17RsbF73LUUXgR2c1usnXOC?usp=sharing)
 
 
 * **PT OPORDs**
