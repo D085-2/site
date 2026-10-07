@@ -31,6 +31,7 @@ nav_order: 1
   * Will upload biweekly, Please review it before each PT. | [View SPT OPORDs ](https://drive.google.com/drive/folders/1eE71CVFnl-2pe-Q04vJnNEHvwHuZRk-r?usp=sharing)
 
 * **Website Changelog**
+  * | [UPDATE] Updated Warrior Knowledge and Chain of Command Quizlet links
   * | [NEW] New Org Chart in Detachment Resources
   * | [NEW] OPLAN is attached onto website
   * | [BUG FIX] Chatbot is up and running in regards to retrieving PT and LLAB opords! Try "What's for Friday LLAB?"
@@ -80,5 +81,5 @@ nav_order: 1
 
 ---
 
-*Last updated: 1st, Oct 2026*
+*Last updated: 6th, Oct 2026*
 *Website Accountability: C/Chen, C/Chauhan*
