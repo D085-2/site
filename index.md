@@ -79,4 +79,4 @@ nav_order: 1
 ---
 
 *Last updated: 6th, Oct 2026*
-*Website Accountability: C/Chen, C/Chauhan*
+*Website Accountability: C/Chen, C/Benson*
