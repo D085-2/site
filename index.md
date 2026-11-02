@@ -31,6 +31,7 @@ nav_order: 1
   * Will upload biweekly, Please review it before each PT. | [View SPT OPORDs ](https://drive.google.com/drive/folders/1eE71CVFnl-2pe-Q04vJnNEHvwHuZRk-r?usp=sharing)
 
 * **Website Changelog**
+  * | [ADDITION] Anonymous Feedback Forms added in Detachment Resources
   * | [DELETE] iClicker deleted
   * | [ADDITION] Det085 Plan 10-245 added in Detachment Resources
 
