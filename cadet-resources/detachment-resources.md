@@ -16,6 +16,12 @@ has_children: true
 
 - [Plan 10-245](https://drive.google.com/file/d/1KGD5JmiY4wZbRzFLb95TKj6kQL-dT-6i/view?usp=sharing){: .btn .btn-outline .fs-3 }
 
+## Anonymous Feedback Forms
+
+- [Cadet IG and Cadet Wing Leadership Anonymous Feedback Form](https://forms.gle/HcR1Hpy3D2DJr2Jp7){: .btn .btn-outline .fs-3 }
+
+- [Cadre Anonymous Feedback Form](https://forms.gle/6NDutQ3wgssRb9F39){: .btn .btn-outline .fs-3 }
+
 ## Detachment OPLAN
 
 <iframe
