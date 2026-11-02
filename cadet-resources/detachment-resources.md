@@ -22,6 +22,12 @@ has_children: true
 
 - [Cadre Anonymous Feedback Form](https://forms.gle/6NDutQ3wgssRb9F39){: .btn .btn-outline .fs-3 }
 
+## LLAB Briefs
+<iframe src="https://drive.google.com/embeddedfolderview?id=1nJa_4arqEJ3OxH7Mr2YfvyW1HkimPrLO#list"
+  style="width: 100%; height: 600px; border: 0; border-radius: 8px; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em;"
+  loading="lazy"></iframe>
+<a href="https://drive.google.com/drive/folders/1nJa_4arqEJ3OxH7Mr2YfvyW1HkimPrLO" target="_blank" rel="noopener"></a>
+
 ## Detachment OPLAN
 
 <iframe

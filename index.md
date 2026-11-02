@@ -32,8 +32,7 @@ nav_order: 1
 
 * **Website Changelog**
   * | [ADDITION] Anonymous Feedback Forms added in Detachment Resources
-  * | [DELETE] iClicker deleted
-  * | [ADDITION] Det085 Plan 10-245 added in Detachment Resources
+  * | [ADDITION] LLAB Briefs added in Detachment Resources
 
 ## Calendar
 
