@@ -144,6 +144,22 @@ function appendMessage(role, text) {
   return bubble;
 }
 
+// Google's "Search Suggestions" for a web-searched answer; Google's terms require showing them.
+// A shadow root keeps their CSS out of the page, and anything that could run script is dropped
+// first (Google's snippet is plain HTML and CSS, so this doesn't change how it looks).
+function appendSuggestions(html) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  doc.querySelectorAll("script, iframe, object, embed").forEach((el) => el.remove());
+  doc.querySelectorAll("*").forEach((el) => [...el.attributes].forEach((a) => {
+    if (/^on/i.test(a.name) || /^\s*javascript:/i.test(a.value)) el.removeAttribute(a.name);
+  }));
+  const box = document.createElement("div");
+  box.className = "d085-suggestions";
+  box.attachShadow({ mode: "open" }).innerHTML = doc.head.innerHTML + doc.body.innerHTML;
+  messageList.appendChild(box);
+  messageList.scrollTop = messageList.scrollHeight;
+}
+
 
 // ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
 
@@ -243,6 +259,7 @@ async function streamReply(typingBubble) {
   let buffer    = "";
   let fullReply = "";
   let replyBubble = null;
+  let suggestions = null;
 
   // Render at most once per display frame (requestAnimationFrame) instead of
   // once per SSE chunk. Chunks can arrive faster than the screen refreshes, so
@@ -296,6 +313,8 @@ async function streamReply(typingBubble) {
           scheduleRender();
         }
 
+        if (event.suggestions) suggestions = event.suggestions; // shown under the finished reply
+
         if (event.done) {
           conversation.push({ role: "assistant", content: fullReply });
           if (event.remaining !== undefined) showQuota(event.remaining);
@@ -315,6 +334,7 @@ async function streamReply(typingBubble) {
   if (replyBubble) {
     replyBubble.innerHTML = renderMarkdown(fullReply);
     messageList.scrollTop = messageList.scrollHeight;
+    if (suggestions) appendSuggestions(suggestions);
   } else {
     typingBubble.remove();
     appendMessage("bot", "Sorry, I didn't get a response.");

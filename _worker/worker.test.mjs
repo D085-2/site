@@ -55,6 +55,14 @@ assert.deepEqual(await run(fakeReply(" [[SEARCH]]\n")), { searched: 1, out: "Fou
 assert.deepEqual(await run(fakeReply("[", "see the OPORD]")), { searched: 0, out: "[see the OPORD]" }, "text that only starts like the signal is kept");
 assert.deepEqual(await run(fakeReply("[")), { searched: 0, out: "[" }, "a short reply held back is still sent");
 await assert.rejects(run(new Response("quota", { status: 429 })), /Gemini error 429/);
+// Search Suggestions from a grounded reply are passed on once, even if several chunks repeat them.
+const grounded = (text) => `data: ${JSON.stringify({ candidates: [{ content: { parts: [{ text }] }, groundingMetadata: { searchEntryPoint: { renderedContent: "<div>chips</div>" } } }] })}\n\n`;
+const shown = [];
+let groundedText = "";
+await relayReply(fakeReply("[[SEARCH]]"), async () => new Response(grounded("Field ") + grounded("training.")), async (t) => { groundedText += t; }, async (h) => { shown.push(h); });
+assert.equal(groundedText, "Field training.");
+assert.deepEqual(shown, ["<div>chips</div>"], "suggestions are sent exactly once");
+
 let fallback = "";
 await relayReply(fakeReply("[[SEARCH]]"), async () => new Response("no grounding on free tier", { status: 400 }), async (t) => { fallback += t; });
 assert.match(fallback, /web search isn't available right now/, "a failed search tells the cadet instead of erroring");

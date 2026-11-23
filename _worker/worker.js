@@ -16,6 +16,7 @@ const GEMINI_STREAM_URL = `https://generativelanguage.googleapis.com/v1beta/mode
 const GEMINI_GENERATE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 const PER_USER_DAILY_LIMIT = 30;
+const SEARCH_DAILY_LIMIT = 150; // 150 x 30 days stays inside Google's 5,000 free searches a month
 const GLOBAL_DAILY_LIMIT = 400; // each message costs 2 KV writes; the free plan allows 1,000/day including cache refreshes
 const MAX_MESSAGES = 10;
 const MAX_MESSAGE_LENGTH = 2000;
@@ -58,6 +59,7 @@ SEARCH MODE: The content above did not answer the latest question, so Google Sea
 
 const KV_KEYS = {
   rateLimitGlobal: (day) => `ratelimit:global:${day}`,
+  searchCount: (day) => `ratelimit:search:${day}`,
   rateLimitUser: (ip, day) => `ratelimit:user:${ip}:${day}`,
   siteContent: "cache:site-content",
   calendar: "cache:calendar",
@@ -459,7 +461,7 @@ async function fetchLatestOpord(label, fileId, fileName, kv) {
             ],
           },
         ],
-        generationConfig: { maxOutputTokens: 2048, thinkingConfig: { thinkingLevel: "minimal" } },
+        generationConfig: { maxOutputTokens: 8192, thinkingConfig: { thinkingLevel: "minimal" } },
       }),
     });
 
@@ -542,8 +544,9 @@ async function rewarmAllCaches(env) {
 // ---------------------------------------------------------------------------
 // GEMINI STREAMING
 // ---------------------------------------------------------------------------
-// Yields the text pieces of a streamed Gemini reply (server-sent events).
-async function* geminiTexts(res) {
+// Yields the text pieces of a streamed Gemini reply (server-sent events). A search-grounded reply
+// also carries Google's "Search Suggestions" HTML, which is passed once to `onSuggestions`.
+async function* geminiTexts(res, onSuggestions) {
   if (!res.ok || !res.body) {
     const errText = await res.text().catch(() => "");
     throw new Error(`Gemini error ${res.status}: ${errText.slice(0, 500)}`);
@@ -551,6 +554,7 @@ async function* geminiTexts(res) {
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let suggestionsSent = false;
   try {
     while (true) {
       const { done, value } = await reader.read();
@@ -564,6 +568,8 @@ async function* geminiTexts(res) {
         try { parsed = JSON.parse(line.slice(6)); } catch { continue; } // ignore malformed SSE lines
         const text = (parsed?.candidates?.[0]?.content?.parts || []).map((p) => p.text || "").join("");
         if (text) yield text;
+        const html = parsed?.candidates?.[0]?.groundingMetadata?.searchEntryPoint?.renderedContent;
+        if (html && onSuggestions && !suggestionsSent) { suggestionsSent = true; await onSuggestions(html); }
       }
     }
   } finally {
@@ -573,16 +579,17 @@ async function* geminiTexts(res) {
 
 // Sends the reply to `send` as it streams. If the model answers only SEARCH_SIGNAL, that reply is
 // dropped and `searchAgain()` (the same question with Google Search) is streamed instead, so
-// questions the site already answers never wait on a search.
-async function relayReply(res, searchAgain, send) {
+// questions the site already answers never wait on a search. Google's terms require showing the
+// search's Search Suggestions with a grounded answer; they go to `sendSuggestions`.
+async function relayReply(res, searchAgain, send, sendSuggestions) {
   let held = searchAgain ? "" : null; // text held back while it could still be the signal
-  for await (const chunk of geminiTexts(res)) {
+  for await (const chunk of geminiTexts(res, sendSuggestions)) {
     if (held === null) { await send(chunk); continue; }
     held += chunk;
     const start = held.trimStart();
     if (start.startsWith(SEARCH_SIGNAL)) {
       try {
-        return await relayReply(await searchAgain(), null, send);
+        return await relayReply(await searchAgain(), null, send, sendSuggestions);
       } catch (e) {
         // e.g. search quota used up, or a free-tier key (Google Search isn't available there)
         console.log(`[chat] search failed: ${e.message}`);
@@ -818,8 +825,12 @@ ${opords}`;
     const writer = writable.getWriter();
     const encoder = new TextEncoder();
 
-    const searchAgain = () =>
-      fetch(`${GEMINI_STREAM_URL}&key=${cachedApiKey}`, {
+    const searchAgain = async () => {
+      const searchKey = KV_KEYS.searchCount(day);
+      const used = parseInt((await kv.get(searchKey)) || "0", 10);
+      if (used >= SEARCH_DAILY_LIMIT) throw new Error("daily search cap reached");
+      await kv.put(searchKey, String(used + 1), { expirationTtl: 86400 });
+      return fetch(`${GEMINI_STREAM_URL}&key=${cachedApiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -828,11 +839,13 @@ ${opords}`;
           tools: [{ google_search: {} }],
         }),
       });
+    };
 
     const pump = async () => {
       const send = (chunk) => writer.write(encoder.encode(`data: ${JSON.stringify({ chunk })}\n\n`));
+      const sendSuggestions = (html) => writer.write(encoder.encode(`data: ${JSON.stringify({ suggestions: html })}\n\n`));
       try {
-        await relayReply(geminiRes, searchAgain, send);
+        await relayReply(geminiRes, searchAgain, send, sendSuggestions);
         await writer.write(
           encoder.encode(`data: ${JSON.stringify({ done: true, remaining: remainingUser })}\n\n`)
         );
