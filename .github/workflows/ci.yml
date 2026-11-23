@@ -1,13 +1,22 @@
 name: CI
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
+  push: # pages.yml already builds the site on push; this only tests worker changes
+    branches: ["main"]
+    paths: ["_worker/**"]
 
 jobs:
+  worker-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Test the chatbot's calendar parsing
+        run: node _worker/calendar.test.mjs
+
   # Build job
   build:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

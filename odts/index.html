@@ -1,0 +1,115 @@
+---
+title: ODTs
+layout: default
+parent: Cadet Resources
+nav_order: 4
+---
+<h1>ODT Opportunities</h1>
+<p>Officer Development Training (ODT) programs. Linked bubbles are related programs. Click a bubble for details, or scroll down for the full list.
+<a href="https://github.com/D085-2/site/edit/main/_data/odts.yml">Add or edit an ODT</a> (instructions are at the top of the file).</p>
+
+<svg id="odt-graph" viewBox="0 0 600 400" role="group" aria-label="ODT graph"></svg>
+<div id="odt-detail" aria-live="polite" hidden></div>
+
+<h2>All ODTs</h2>
+{% for o in site.data.odts %}
+<article class="odt-card" id="odt-{{ forloop.index }}" data-group="{{ o.group }}" data-expires="{{ o.expires | date: '%Y-%m-%d' }}">
+<h3>{{ o.name }} <span class="label">{{ o.group }}</span>{% if o.placeholder %} <span class="label label-yellow">Placeholder</span>{% endif %}<span class="label odt-expired-label">Expired</span></h3>
+<p>{{ o.description }}</p>
+<dl>
+<dt>Program dates</dt><dd>{{ o.dates | default: 'TBD' }}</dd>
+<dt>Eligibility</dt><dd>{{ o.eligibility }}</dd>
+<dt>Location</dt><dd>{{ o.location }}</dd>
+<dt>How to apply</dt><dd>{{ o.apply }}</dd>
+<dt>Apply by</dt><dd>{{ o.deadline | date: '%d %b %Y' | default: 'Not announced - ask cadre' }}</dd>
+{% if o.expires %}<dt>Expires</dt><dd>{{ o.expires | date: '%d %b %Y' }}</dd>{% endif %}
+{% if o.link %}<dt>Link</dt><dd><a href="{{ o.link }}" aria-label="{{ o.name }} link">Open link</a></dd>{% endif %}
+</dl>
+</article>
+{% endfor %}
+
+<script>
+(function () {
+  var today = new Date().toLocaleDateString('en-CA'); /* YYYY-MM-DD in the visitor's time zone, not UTC */
+  var cards = [].slice.call(document.querySelectorAll('article.odt-card'));
+  cards.forEach(function (c) { if (c.dataset.expires && c.dataset.expires < today) c.classList.add('odt-expired'); });
+
+  /* Obsidian-style graph: nodes = ODTs, links = same group, live physics, drag, hover highlight. Block comments only: the theme strips newlines. */
+  var W = 600, H = 400, svg = document.getElementById('odt-graph'), detail = document.getElementById('odt-detail'), NS = 'http://www.w3.org/2000/svg';
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches, alpha = 1, running = false, drag = null;
+  function make(tag, attrs, parent) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+  var nodes = cards.map(function (c, i) {
+    var a = 2 * Math.PI * i / cards.length;
+    return { el: c, x: W / 2 + 30 * Math.cos(a), y: H / 2 + 30 * Math.sin(a), vx: 0, vy: 0, near: [] };
+  });
+  var links = [];
+  nodes.forEach(function (a, i) { nodes.slice(i + 1).forEach(function (b) {
+    if (a.el.dataset.group !== b.el.dataset.group) return;
+    links.push({ a: a, b: b, line: make('line', { 'class': 'odt-link' }, svg) }); a.near.push(b); b.near.push(a);
+  }); });
+
+  function tick() {
+    nodes.forEach(function (a) { nodes.forEach(function (b) {
+      if (a === b) return;
+      var dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy || 1;
+      a.vx += dx / d2 * 90 * alpha; a.vy += dy / d2 * 90 * alpha;
+    }); });
+    links.forEach(function (l) {
+      var dx = l.b.x - l.a.x, dy = l.b.y - l.a.y, d = Math.sqrt(dx * dx + dy * dy) || 1, f = (d - 90) / d * 0.05 * alpha;
+      l.a.vx += dx * f; l.a.vy += dy * f; l.b.vx -= dx * f; l.b.vy -= dy * f;
+    });
+    nodes.forEach(function (n) {
+      n.vx = (n.vx + (W / 2 - n.x) * 0.02 * alpha) * 0.85; n.vy = (n.vy + (H / 2 - n.y) * 0.02 * alpha) * 0.85;
+      if (n !== drag) { n.x += n.vx; n.y += n.vy; }
+      n.x = Math.max(100, Math.min(W - 100, n.x)); n.y = Math.max(30, Math.min(H - 40, n.y));
+    });
+    alpha *= 0.985;
+  }
+  function draw() {
+    links.forEach(function (l) { l.line.setAttribute('x1', l.a.x); l.line.setAttribute('y1', l.a.y); l.line.setAttribute('x2', l.b.x); l.line.setAttribute('y2', l.b.y); });
+    nodes.forEach(function (n) { n.g.setAttribute('transform', 'translate(' + n.x + ',' + n.y + ')'); });
+  }
+  function frame() { tick(); draw(); if (alpha > 0.005 || drag) requestAnimationFrame(frame); else running = false; }
+  function heat(a) {
+    alpha = Math.max(alpha, a);
+    if (still) { while (alpha > 0.005) tick(); draw(); }
+    else if (!running) { running = true; requestAnimationFrame(frame); }
+  }
+  function point(e) { var p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
+  function focusOn(n) {
+    svg.classList.toggle('odt-hovering', !!n);
+    nodes.forEach(function (m) { m.g.classList.toggle('odt-near', !!n && (m === n || n.near.indexOf(m) > -1)); });
+    links.forEach(function (l) { l.line.classList.toggle('odt-near', !!n && (l.a === n || l.b === n)); });
+  }
+
+  nodes.forEach(function (n) {
+    var name = n.el.querySelector('h3').firstChild.textContent.trim(), expired = n.el.classList.contains('odt-expired'), down = null;
+    var g = n.g = make('g', { 'class': 'odt-node' + (expired ? ' odt-expired' : ''), tabindex: 0, role: 'button', 'aria-label': name + (expired ? ' (expired)' : '') }, svg);
+    make('circle', { r: 16 }, g);
+    make('text', { y: 32, 'text-anchor': 'middle' }, g).textContent = name.length > 13 ? name.slice(0, 11).trim() + '…' : name;
+    make('title', {}, g).textContent = name;
+    function show() {
+      /* the clicked ODT, then the ODTs linked to it in the graph */
+      var copy = function (m) { var c = m.el.cloneNode(true); c.removeAttribute('id'); return c; };
+      var parts = [copy(n)];
+      if (n.near.length) { var h = document.createElement('h2'); h.textContent = 'Related ODTs'; parts.push(h); }
+      detail.replaceChildren.apply(detail, parts.concat(n.near.map(copy)));
+      detail.hidden = false;
+      nodes.forEach(function (m) { m.g.classList.toggle('odt-selected', m === n); });
+    }
+    g.addEventListener('pointerenter', function () { focusOn(n); });
+    g.addEventListener('pointerleave', function () { if (!drag) focusOn(null); });
+    g.addEventListener('focus', function () { focusOn(n); });
+    g.addEventListener('blur', function () { focusOn(null); });
+    g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); } });
+    g.addEventListener('pointerdown', function (e) { down = { x: e.clientX, y: e.clientY }; drag = n; g.setPointerCapture(e.pointerId); g.classList.add('odt-dragging'); heat(0.3); });
+    g.addEventListener('pointermove', function (e) { if (drag !== n) return; var p = point(e); n.x = p.x; n.y = p.y; n.vx = n.vy = 0; heat(0.3); });
+    g.addEventListener('pointerup', function (e) {
+      drag = null; g.classList.remove('odt-dragging');
+      if (down && Math.abs(e.clientX - down.x) + Math.abs(e.clientY - down.y) < 5) show();
+      down = null;
+    });
+  });
+  heat(1);
+})();
+</script>

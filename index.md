@@ -31,8 +31,9 @@ nav_order: 1
   * Will upload biweekly, Please review it before each PT. | [View SPT OPORDs ](https://drive.google.com/drive/folders/1eE71CVFnl-2pe-Q04vJnNEHvwHuZRk-r?usp=sharing)
 
 * **Website Changelog**
-  * | [ADDITION] Anonymous Feedback Forms added in Detachment Resources
-  * | [ADDITION] LLAB Briefs added in Detachment Resources
+  * | [ADDITION] ODT Tracker, use this to help you find active ODTs offered by cadre!
+  * | [ADDITION] Chatbot can now read the detachment calendar
+  * | [FIX] Chatbot should be 70% faster when retrieving information related to the Detachment, it used to run google_search() function everytime despite not needing it
 
 ## Calendar
 
@@ -78,5 +79,8 @@ nav_order: 1
 
 ---
 
-*Last updated: 2nd Novemeber, 2026*
-*Website Accountability: C/Chen, C/Benson*
+*Last updated: 22nd November, 2026*
+
+*Forward all inquiries to C/Chen, Kwun on Slack*
+
+*Website Accountability: C/Maj Son, C/Chen, C/Benson, C/Umegboh*

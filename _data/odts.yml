@@ -1,0 +1,122 @@
+# ODT (Officer Development Training) opportunities, shown on the ODTs page.
+# To add one: copy the block below, paste it at the bottom, remove the "# ", fill it in, then Commit changes.
+# - name: EXAMPLE PROGRAM
+#   group: VICEROY              # ODTs with the same group are linked in the graph
+#   description: One or two sentences on what the program is.
+#   dates: 6 Jun - 31 Jul 2027  # when the program runs (free text)
+#   eligibility: Who can apply
+#   location: Where it happens
+#   apply: How to apply / who to contact
+#   deadline: 2027-01-15        # apply-by date, YYYY-MM-DD (leave out if not announced)
+#   expires: 2027-01-15         # after this date it shows as expired, YYYY-MM-DD (usually the final deadline)
+#   link: https://example.com   # optional
+
+- name: VICEROY MAVEN
+  group: VICEROY
+  description: 8-week cyber and electromagnetic spectrum internship with hands-on research, leadership and operations work. $7,500 stipend; lodging, transportation and most meals provided.
+  dates: 6 Jun - 31 Jul 2027
+  eligibility: US citizen, security clearance eligible. CS, EE, CompE, cyber security or related major. 3.2+ GPA recommended. GMC preferred, any year welcome.
+  location: VICEROY host sites
+  apply: DM cadre
+  deadline: 2026-11-01
+  expires: 2026-11-01
+
+- name: VICEROY ENVOY
+  group: VICEROY
+  description: 10-week cyber-spectrum internship on real national security projects; usually a follow-on to MAVEN and can lead to permanent placement. $9,600 stipend; lodging, transportation and most meals provided.
+  dates: 30 May - 7 Aug 2027
+  eligibility: US citizen, security clearance eligible (some roles need Secret). CS, EE, CompE, cyber security or related major. 3.2+ GPA recommended. Prior MAVEN graduate preferred.
+  location: VICEROY host sites
+  apply: DM cadre. Needs a current resume and transcripts (unofficial OK).
+  deadline: 2026-11-01
+  expires: 2026-11-01
+
+- name: LLNL Summer Internship
+  group: Research Labs
+  description: Paid, full-time 10-12 week research internship at Lawrence Livermore National Laboratory, STEM and non-STEM. Co-op or part-time academic-year spots may also be available. Rolling admissions.
+  dates: Summer 2027, 10-12 weeks
+  eligibility: Qualified AFROTC cadets; see the execution plan
+  location: Livermore, CA
+  apply: Read the execution plan, then DM cadre ASAP. Applications after 15 Jan 2027 may be too late.
+  deadline: 2027-01-15
+  expires: 2027-01-15
+
+- name: AFRL ACE
+  group: Research Labs
+  description: Advanced Course in Engineering - competitive, paid 10-week cybersecurity internship with coursework, R&D projects, cyber exercises and PT. Up to 14 selected.
+  dates: May - Aug 2027
+  eligibility: Qualified AFROTC cadets interested in cyber
+  location: AFRL Information Directorate, Rome, NY
+  apply: Sign up on the form before applying. Priority deadline 6 Dec 2026, final deadline 24 Jan 2027.
+  deadline: 2026-12-06
+  expires: 2027-01-24
+  link: https://forms.gle/grLRQH6wyo9GDotDA
+
+- name: ATRC Summer Internship
+  group: Research Labs
+  description: Advanced Technology Research Center research internship - sensing, AI, aerospace and sensor components, spectrum warfare, high-performance computing.
+  dates: 3 May - 6 Aug 2027 (tentative)
+  eligibility: See the execution plan before applying
+  location: University of Dayton at Wright-Patterson AFB and Wright State University, Dayton, OH
+  apply: If qualified and interested, apply on the form
+  link: https://docs.google.com/forms/d/e/1FAIpQLSf5PIbQUq0BlA63ZxPjhdPk_ZgkkMrzKDFUL-KMV3QJIXs0zw/viewform
+
+- name: TALON
+  group: Edwards TPS
+  description: Test and Analysis Leaders of Next-Generation - 4 weeks embedded in Air Force flight test (test planning, data, safety, flight test execution, autonomy and AI). About 6-8 selected; selections announced Dec 2026.
+  dates: 7 Jun - 2 Jul 2027
+  eligibility: Qualified AFROTC cadets
+  location: Edwards AFB, CA
+  apply: Sign up on the form before applying
+  deadline: 2026-11-20
+  expires: 2026-11-20
+  link: https://forms.gle/u1cDuQTs6Lrc4o8t5
+
+- name: ENDER
+  group: Edwards TPS
+  description: Empowering Next-Gen Defense Engineers through Research - full-summer flight-test research with TPS instructors and test pilots; also serve as assistants for the TALON cohort. Selections announced Dec 2026.
+  dates: Summer 2027
+  eligibility: Must have completed TALON
+  location: USAF Test Pilot School Doolittle Labs, Edwards AFB, CA
+  apply: DM cadre
+  deadline: 2026-11-20
+  expires: 2026-11-20
+
+- name: Aim High Flight Academy
+  group: Flight Training
+  description: Introductory university flight training, up to 15 flight hours and a chance to improve PCSM scores. 22-25 cadets plus 10 alternates; may mentor high school students.
+  dates: About 20 days within 31 May - 8 Aug 2027
+  eligibility: US citizen (or TSA approval), 18+, 3.0 GPA, under 250 lbs, under 5 flying hours, no Private Pilot License or prior flight academy. All AS levels; GMC preferred.
+  location: TBD (a few OCONUS spots need a passport)
+  apply: Express interest on the form
+  link: https://forms.gle/UCzbqsnMFRNse3Y26
+
+- name: JROTC Flight Academy
+  group: Flight Training
+  description: Intensive flight training aimed at earning a Private Pilot Certificate. 16 cadets plus 10 alternates; serve as class leaders and mentors for JROTC students.
+  dates: About 8 weeks, May - Aug 2027
+  eligibility: US citizen, 17+ by 15 Jul 2027, AS300 (or AS400 in a 5-year degree), 3.0 GPA, passing PFA, rated AFSC or interest, 10 or fewer flying hours, under 250 lbs, at least 5 ft. FAA Class I physical at your own expense.
+  location: TBD (university flight schools)
+  apply: Apply on the form
+  link: https://forms.gle/zNnakjYGbZZw8DKZ8
+
+- name: You Can Fly / You Can Certify
+  group: Flight Training
+  description: Funding toward a Private Pilot Certificate for cadets with little or no flying experience - up to $5,000 (YCF), then up to $15,000 (YCC) for those who use it up.
+  dates: Sep 2026 - 1 Sep 2027
+  eligibility: AS300s and below
+  location: Approved local flight school
+  apply: DM cadre with why you are interested and why you deserve it
+  deadline: 2026-09-14
+  expires: 2026-09-14
+
+- name: ROTC Flagship Summer Language Program
+  group: Language
+  description: Fully funded summer study of a critical language (Arabic, Mandarin, Korean, Russian, Swahili), abroad or hybrid.
+  dates: Summer 2027
+  eligibility: Contracted cadets only
+  location: Partner universities / study abroad
+  apply: Apply through the interest form. More info at iie.org/programs/rotc-flagship
+  deadline: 2027-01-19
+  expires: 2027-01-19
+  link: https://forms.gle/mtyTxX1PD71b58CD7

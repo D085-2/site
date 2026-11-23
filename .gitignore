@@ -17,3 +17,6 @@ vendor/
 # macOS system files
 .DS_Store
 **/.DS_Store
+
+# Local Claude Code config
+.claude/

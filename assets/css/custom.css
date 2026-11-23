@@ -20,3 +20,26 @@
   }
 }
 
+
+/* ODT page */
+#odt-graph { width: 100%; max-height: 420px; border: 1px solid #eeebee; border-radius: 4px; }
+.odt-link { stroke: #1a3a6b; stroke-opacity: .35; stroke-width: 2; }
+.odt-node { cursor: grab; outline: none; touch-action: none; transition: opacity .2s; }
+.odt-node.odt-dragging { cursor: grabbing; }
+.odt-link { transition: opacity .2s, stroke-width .2s; }
+.odt-node circle { fill: #1a3a6b; stroke: #fff; stroke-width: 3; transition: transform .2s; transform-box: fill-box; transform-origin: center; }
+.odt-node:hover circle, .odt-node:focus circle, .odt-dragging circle { transform: scale(1.25); }
+.odt-hovering .odt-node:not(.odt-near), .odt-hovering .odt-link:not(.odt-near) { opacity: .2; }
+.odt-hovering .odt-link.odt-near { stroke-opacity: 1; stroke-width: 3; }
+.odt-node text { font-size: 11px; fill: #27262b; }
+.odt-node:hover circle, .odt-node:focus circle, .odt-selected circle { stroke: #f7d12e; }
+.odt-node.odt-expired circle { fill: #c4c4c4; stroke-dasharray: 4 3; stroke: #959396; }
+.odt-node.odt-expired text { fill: #959396; }
+.odt-card { border: 1px solid #eeebee; border-radius: 4px; padding: 0 1rem; margin: 1rem 0; }
+.odt-card dl { column-gap: .75rem; }
+.odt-card dt { font-weight: 600; margin: 0 0 .5rem; }
+.odt-card dd { margin: 0 0 .5rem; min-width: 0; overflow-wrap: anywhere; }
+.odt-expired-label { display: none !important; background: #959396 !important; }
+.odt-card.odt-expired { opacity: .6; }
+.odt-card.odt-expired h3 { text-decoration: line-through; }
+.odt-card.odt-expired .odt-expired-label { display: inline-block !important; }

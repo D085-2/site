@@ -16,9 +16,8 @@ const MAX_HISTORY_MEM = MAX_HISTORY_OUT * 2; // how many messages are kept in me
 
 const conversation   = [];   // full chat history stored in memory
 let lastSentAt       = 0;    // timestamp of the last successful send
-let quotaRemaining   = null; // message quota reported by the server
-let lastMessageHash  = null; // SHA-256 of the last sent message (dedup)
-let lastHashedAt     = 0;    // timestamp of that hash
+let lastMessage      = null; // last sent message text (dedup)
+let lastMessageAt    = 0;    // when it was sent
 
 
 // ─── DOM REFERENCES ───────────────────────────────────────────────────────────
@@ -73,18 +72,6 @@ function showQuota(remaining) {
   quotaBar.style.color   = remaining <= 5 ? "#e53935" : "#aaa";
 }
 
-function updateQuota(serverRemaining) {
-  // Take the lower of the local count and what the server reports,
-  // so the display stays accurate even if the page is open in two tabs.
-  if (quotaRemaining === null) {
-    quotaRemaining = serverRemaining;
-  } else {
-    quotaRemaining = Math.min(quotaRemaining - 1, serverRemaining);
-  }
-  showQuota(quotaRemaining);
-}
-
-
 // ─── UI EVENTS ────────────────────────────────────────────────────────────────
 
 chatToggle.addEventListener("click", () => {
@@ -118,15 +105,6 @@ function escapeHtml(str) {
   return str.replace(/[&<>"']/g, char => HTML_ESCAPES[char]);
 }
 
-// Browser-native SHA-256 via SubtleCrypto — no library needed, runs in ~1 ms.
-// Used to fingerprint outgoing messages and block accidental duplicates.
-async function sha256(text) {
-  const bytes  = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, "0")).join("");
-}
-
-
 // ─── MARKDOWN RENDERER ────────────────────────────────────────────────────────
 // Supports: **bold**, [text](url), bare URLs, bullet lists ( - or * ), line breaks.
 // Text is HTML-escaped before any substitution so no raw server tags reach the DOM.
@@ -141,7 +119,7 @@ function renderMarkdown(text) {
     // accidentally being interpreted as a replacement pattern (e.g. "$2").
     .replace(/\[([^\]]{1,200})\]\((https?:\/\/[^)\s]{1,500})\)/g,
       (_, label, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`)
-    .replace(/(?<!["\(])(https?:\/\/[^\s<]{1,500})/g,
+    .replace(/(?<!["\(>])(https?:\/\/[^\s<]{1,500})/g,
       (_, url)        => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`)
     .replace(/^\s*[*-]\s+(.{1,500})/gm, "<li>$1</li>")
     .replace(/((?:<li>.*?<\/li>\s*)+)/gs, (_, items) => "<ul>" + items.replace(/\n/g, "") + "</ul>")
@@ -180,7 +158,7 @@ async function sendMessage() {
     return;
   }
 
-  // Cooldown is checked before the async hash so rate-limited taps cost nothing.
+  // Cooldown is checked before the dedup check so rate-limited taps cost nothing.
   const now = Date.now();
   if (now - lastSentAt < COOLDOWN_MS) {
     const waitSecs = Math.ceil((COOLDOWN_MS - (now - lastSentAt)) / 1000);
@@ -189,13 +167,12 @@ async function sendMessage() {
   }
 
   // Dedup: identical message within 30 s is rejected before it reaches the Worker or Gemini API.
-  const hash = await sha256(text);
-  if (hash === lastMessageHash && now - lastHashedAt < DEDUP_WINDOW_MS) {
+  if (text === lastMessage && now - lastMessageAt < DEDUP_WINDOW_MS) {
     appendMessage("bot", "You already sent that message recently. Please try rephrasing.");
     return;
   }
-  lastMessageHash = hash;
-  lastHashedAt    = now;
+  lastMessage   = text;
+  lastMessageAt = now;
 
   // --- Commit the send ---
 
@@ -321,7 +298,7 @@ async function streamReply(typingBubble) {
 
         if (event.done) {
           conversation.push({ role: "assistant", content: fullReply });
-          if (event.remaining !== undefined) updateQuota(event.remaining);
+          if (event.remaining !== undefined) showQuota(event.remaining);
         }
 
       } catch { /* skip malformed SSE lines */ }
