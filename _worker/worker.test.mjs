@@ -1,16 +1,17 @@
-// Checks the worker's calendar parsing. Run: node _worker/calendar.test.mjs
+// Checks the worker's calendar parsing and search fallback. Run: node _worker/worker.test.mjs
 // The worker only has a default export (what Cloudflare expects), so the test copies it
 // to a temp file with the helpers exported instead of changing the deployed code.
 import assert from "node:assert";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 process.env.TZ = "UTC"; // Cloudflare runs in UTC
 const copy = join(tmpdir(), `worker-test-${process.pid}.mjs`);
-writeFileSync(copy, readFileSync(new URL("./worker.js", import.meta.url), "utf8") + "\nexport { parseICSDate, parseICS, formatDate };\n");
-const { parseICSDate, parseICS, formatDate } = await import(pathToFileURL(copy));
+writeFileSync(copy, readFileSync(new URL("./worker.js", import.meta.url), "utf8") + "\nexport { parseICSDate, parseICS, formatDate, relayReply };\n");
+const { parseICSDate, parseICS, formatDate, relayReply } = await import(pathToFileURL(copy));
+rmSync(copy);
 
 // Pacific winter (UTC-8) and summer (UTC-7), UTC, and all-day dates.
 assert.equal(parseICSDate("20261120T070000").toISOString(), "2026-11-20T15:00:00.000Z");
@@ -41,4 +42,21 @@ assert.ok(!edited.some((e) => e.summary === "PT" && +e.start === +second), "a mo
 assert.ok(edited.some((e) => e.summary === "PT (moved)"), "the moved session is kept");
 assert.equal(parseICS(ics(["UID:x", "SUMMARY:old", "DTSTART;TZID=America/Los_Angeles:20250101T060000", "RRULE:FREQ=WEEKLY;UNTIL=20250301T000000Z;BYDAY=WE"])).length, 0, "an ended series shows nothing");
 
-console.log("calendar tests passed");
+// Search fallback: a fake streamed Gemini reply, split into the given pieces.
+const fakeReply = (...pieces) => new Response(pieces.map((t) => `data: ${JSON.stringify({ candidates: [{ content: { parts: [{ text: t }] } }] })}\n\n`).join(""));
+const run = async (first) => {
+  let searched = 0, out = "";
+  await relayReply(first, async () => { searched++; return fakeReply("Found ", "online."); }, async (t) => { out += t; });
+  return { searched, out };
+};
+assert.deepEqual(await run(fakeReply("PT is ", "at 0700.")), { searched: 0, out: "PT is at 0700." }, "normal answers stream without searching");
+assert.deepEqual(await run(fakeReply("[[SEA", "RCH]]")), { searched: 1, out: "Found online." }, "the signal, even split, triggers one search");
+assert.deepEqual(await run(fakeReply(" [[SEARCH]]\n")), { searched: 1, out: "Found online." }, "spaces around the signal are fine");
+assert.deepEqual(await run(fakeReply("[", "see the OPORD]")), { searched: 0, out: "[see the OPORD]" }, "text that only starts like the signal is kept");
+assert.deepEqual(await run(fakeReply("[")), { searched: 0, out: "[" }, "a short reply held back is still sent");
+await assert.rejects(run(new Response("quota", { status: 429 })), /Gemini error 429/);
+let fallback = "";
+await relayReply(fakeReply("[[SEARCH]]"), async () => new Response("no grounding on free tier", { status: 400 }), async (t) => { fallback += t; });
+assert.match(fallback, /web search isn't available right now/, "a failed search tells the cadet instead of erroring");
+
+console.log("worker tests passed");

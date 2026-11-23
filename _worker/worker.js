@@ -11,7 +11,7 @@ const ALLOWED_ORIGINS = new Set([
   "https://d085-2.github.io",
 ]);
 
-const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_MODEL = "gemini-3.5-flash-lite"; // cheapest stable model that still does PDFs, thinking "minimal" and Google Search
 const GEMINI_STREAM_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse`;
 const GEMINI_GENERATE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
@@ -51,6 +51,11 @@ const DRIVE_FOLDER_IDS = {
   LLAB: "14fdc2qNvM17RsbF73LUUXgR2c1usnXOC",
 };
 
+const SEARCH_SIGNAL = "[[SEARCH]]"; // the model replies with only this when the provided content lacks the answer
+const SEARCH_MODE_NOTE = `
+
+SEARCH MODE: The content above did not answer the latest question, so Google Search is now available. Use it, prefer official Air Force and AFROTC sources, and never reply with ${SEARCH_SIGNAL}. If the question is about this detachment specifically (its dates, times, people or places) and search doesn't answer it, say so and suggest asking cadre.`;
+
 const KV_KEYS = {
   rateLimitGlobal: (day) => `ratelimit:global:${day}`,
   rateLimitUser: (ip, day) => `ratelimit:user:${ip}:${day}`,
@@ -75,6 +80,7 @@ Keep answers concise and professional — 3 sentences or fewer for simple questi
 Write in plain prose sentences only — never use bullet points, numbered lists, dashes, or any list formatting of any kind, even if the source material (like an OPORD) is itself formatted as a list. Convert any list-shaped source content into flowing sentences.
 Do not use filler phrases like "I hope this helps" or "Great question." Get straight to the answer.
 If you don't know something, say so plainly instead of guessing.
+If the content below does not answer the cadet's question, reply with exactly [[SEARCH]] and nothing else; the question is then answered again with Google Search. Do not use [[SEARCH]] for greetings, small talk or questions about you.
 For questions about ODTs (Officer Development Training opportunities such as summer internships, research programs or flight academies), do not answer from memory; direct the cadet to the ODT page at https://d085-2.github.io/site/odts/ and suggest they ask cadre.
 
 You will be given the current website content, upcoming calendar events, and the latest LLAB and SPT (Physical Training) OPORDs below. Use them as your source of truth for anything time-sensitive. If an OPORD says it "could not be loaded," tell the user that directly rather than guessing at PT/LLAB details from memory.`;
@@ -453,7 +459,7 @@ async function fetchLatestOpord(label, fileId, fileName, kv) {
             ],
           },
         ],
-        generationConfig: { maxOutputTokens: 2048, thinkingConfig: { thinkingBudget: 0 } },
+        generationConfig: { maxOutputTokens: 2048, thinkingConfig: { thinkingLevel: "minimal" } },
       }),
     });
 
@@ -531,6 +537,61 @@ async function rewarmAllCaches(env) {
   await Promise.all([fetchSiteContent(kv), fetchCalendarEvents(kv), fetchOpords(kv, env.APPS_SCRIPT_URL)]);
 
   console.log(`[rewarm] done`);
+}
+
+// ---------------------------------------------------------------------------
+// GEMINI STREAMING
+// ---------------------------------------------------------------------------
+// Yields the text pieces of a streamed Gemini reply (server-sent events).
+async function* geminiTexts(res) {
+  if (!res.ok || !res.body) {
+    const errText = await res.text().catch(() => "");
+    throw new Error(`Gemini error ${res.status}: ${errText.slice(0, 500)}`);
+  }
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        let parsed;
+        try { parsed = JSON.parse(line.slice(6)); } catch { continue; } // ignore malformed SSE lines
+        const text = (parsed?.candidates?.[0]?.content?.parts || []).map((p) => p.text || "").join("");
+        if (text) yield text;
+      }
+    }
+  } finally {
+    reader.cancel().catch(() => {});
+  }
+}
+
+// Sends the reply to `send` as it streams. If the model answers only SEARCH_SIGNAL, that reply is
+// dropped and `searchAgain()` (the same question with Google Search) is streamed instead, so
+// questions the site already answers never wait on a search.
+async function relayReply(res, searchAgain, send) {
+  let held = searchAgain ? "" : null; // text held back while it could still be the signal
+  for await (const chunk of geminiTexts(res)) {
+    if (held === null) { await send(chunk); continue; }
+    held += chunk;
+    const start = held.trimStart();
+    if (start.startsWith(SEARCH_SIGNAL)) {
+      try {
+        return await relayReply(await searchAgain(), null, send);
+      } catch (e) {
+        // e.g. search quota used up, or a free-tier key (Google Search isn't available there)
+        console.log(`[chat] search failed: ${e.message}`);
+        return send("I couldn't find that in the detachment's information, and web search isn't available right now. Please ask cadre.");
+      }
+    }
+    if (!SEARCH_SIGNAL.startsWith(start)) { await send(held); held = null; }
+  }
+  if (held) await send(held);
 }
 
 // ---------------------------------------------------------------------------
@@ -713,7 +774,8 @@ ${calendarEvents}
 === CURRENT OPORDS ===
 ${opords}`;
 
-    // No google_search tool: grounding added a search round-trip before the first token on every message.
+    // No google_search tool on the first call: grounding added a search round-trip before the first token
+    // on every message. Search only runs when the model asks for it (see relayReply).
     const geminiPayload = {
       system_instruction: { parts: [{ text: fullSystemPrompt }] },
       contents: messages.map((m) => ({
@@ -721,9 +783,9 @@ ${opords}`;
         parts: [{ text: m.content }],
       })),
       generationConfig: {
+        // no temperature: 3.5 Flash-Lite and newer ignore it and Google says future models will reject it
         maxOutputTokens: 1024,
-        temperature: 0.3,
-        thinkingConfig: { thinkingBudget: 0 },
+        thinkingConfig: { thinkingLevel: "minimal" },
       },
     };
 
@@ -756,33 +818,21 @@ ${opords}`;
     const writer = writable.getWriter();
     const encoder = new TextEncoder();
 
-    const pump = async () => {
-      const reader = geminiRes.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split("\n");
-          buffer = lines.pop();
+    const searchAgain = () =>
+      fetch(`${GEMINI_STREAM_URL}&key=${cachedApiKey}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...geminiPayload,
+          system_instruction: { parts: [{ text: fullSystemPrompt + SEARCH_MODE_NOTE }] },
+          tools: [{ google_search: {} }],
+        }),
+      });
 
-          for (const line of lines) {
-            if (!line.startsWith("data: ")) continue;
-            const json = line.slice(6).trim();
-            if (!json) continue;
-            try {
-              const parsed = JSON.parse(json);
-              const chunk = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (chunk) {
-                await writer.write(encoder.encode(`data: ${JSON.stringify({ chunk })}\n\n`));
-              }
-            } catch {
-              // ignore malformed SSE lines
-            }
-          }
-        }
+    const pump = async () => {
+      const send = (chunk) => writer.write(encoder.encode(`data: ${JSON.stringify({ chunk })}\n\n`));
+      try {
+        await relayReply(geminiRes, searchAgain, send);
         await writer.write(
           encoder.encode(`data: ${JSON.stringify({ done: true, remaining: remainingUser })}\n\n`)
         );

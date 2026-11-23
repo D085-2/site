@@ -14,7 +14,7 @@ New ODTs can take up to 24 hours to appear here, since a website team member add
 <h2>All ODTs</h2>
 {% for o in site.data.odts %}
 <article class="odt-card" id="odt-{{ forloop.index }}" data-group="{{ o.group }}" data-expires="{{ o.expires | date: '%Y-%m-%d' }}">
-<h3>{{ o.name }} <span class="label">{{ o.group }}</span>{% if o.placeholder %} <span class="label label-yellow">Placeholder</span>{% endif %}<span class="label odt-expired-label">Expired</span></h3>
+<h3>{{ o.name }} <span class="label">{{ o.group }}</span><span class="label odt-expired-label">Expired</span></h3>
 <p>{{ o.description }}</p>
 <dl>
 <dt>Program dates</dt><dd>{{ o.dates | default: 'TBD' }}</dd>
@@ -104,6 +104,7 @@ New ODTs can take up to 24 hours to appear here, since a website team member add
     g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); } });
     g.addEventListener('pointerdown', function (e) { down = { x: e.clientX, y: e.clientY }; drag = n; g.setPointerCapture(e.pointerId); g.classList.add('odt-dragging'); heat(0.3); });
     g.addEventListener('pointermove', function (e) { if (drag !== n) return; var p = point(e); n.x = p.x; n.y = p.y; n.vx = n.vy = 0; heat(0.3); });
+    g.addEventListener('pointercancel', function () { drag = down = null; g.classList.remove('odt-dragging'); }); /* phone took over the touch */
     g.addEventListener('pointerup', function (e) {
       drag = null; g.classList.remove('odt-dragging');
       if (down && Math.abs(e.clientX - down.x) + Math.abs(e.clientY - down.y) < 5) show();

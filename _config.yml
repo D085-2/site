@@ -4,6 +4,7 @@ theme: just-the-docs
 
 url: https://d085-2.github.io
 baseurl: /site
+exclude: [README.md, LICENSE]
 
   # aux_links:
   #   Template Repository: https://github.com/just-the-docs/just-the-docs-template #for later

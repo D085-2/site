@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Test the chatbot's calendar parsing
-        run: node _worker/calendar.test.mjs
+      - name: Test the chatbot worker
+        run: node _worker/worker.test.mjs
 
   # Build job
   build:
